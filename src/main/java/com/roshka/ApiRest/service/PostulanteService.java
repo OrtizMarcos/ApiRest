@@ -2,8 +2,10 @@ package com.roshka.ApiRest.service;
 
 import com.roshka.ApiRest.model.Postulante;
 import com.roshka.ApiRest.repository.PostulanteRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.roshka.ApiRest.exception.PostulanteNoEncontradoException;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,11 +27,19 @@ public class PostulanteService {
     public Postulante savePostulante(Postulante postulante) {
         return postulanteRepository.save(postulante);
     }
+
     public Optional<Postulante> getPostulanteByCedula(String nroCedula) {
         return postulanteRepository.findByNroCedula(nroCedula);
     }
 
     public void deletePostulante(Long id) {
         postulanteRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void eliminarPostulantePorCedula(String nroCedula) {
+        Postulante postulante = postulanteRepository.findByNroCedula(nroCedula)
+                .orElseThrow(() -> new PostulanteNoEncontradoException("Postulante con cédula " + nroCedula + " no encontrado."));
+        postulanteRepository.delete(postulante);
     }
 }

@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface PostulanteRepository extends JpaRepository<Postulante, Long> {
     Optional<Postulante> findByNroCedula(String nroCedula);
+    void deleteByNroCedula(String nroCedula);
+
 }
