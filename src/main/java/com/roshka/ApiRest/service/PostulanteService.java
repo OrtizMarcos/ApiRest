@@ -25,6 +25,9 @@ public class PostulanteService {
     public Postulante savePostulante(Postulante postulante) {
         return postulanteRepository.save(postulante);
     }
+    public Optional<Postulante> getPostulanteByCedula(String nroCedula) {
+        return postulanteRepository.findByNroCedula(nroCedula);
+    }
 
     public void deletePostulante(Long id) {
         postulanteRepository.deleteById(id);

@@ -3,28 +3,51 @@ package com.roshka.ApiRest.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Postulante")
+@Table(name = "Postulante") // Especifica explícitamente el nombre de la tabla
 public class Postulante {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false) // No debe ser nulo
     private String nombre;
+
+    @Column(nullable = false) // No debe ser nulo
     private String apellido;
-    private Integer nroCedula;
+
+    @Column(name = "nroCedula", nullable = false, unique = true) // Clave única y no nula
+    private String nroCedula;
+
+    @Column(nullable = false) // No debe ser nulo
     private String correo;
+
+    @Column(nullable = false)
     private String telefono;
+
+    @Column(nullable = false)
     private String direccion;
+
+    @Column(name = "experiencia_laboral", nullable = false)
     private Boolean experienciaLaboral;
+
+    @Column(name = "estudio_universitario", nullable = false)
     private Boolean estudioUniversitario;
+
+    @Column(nullable = false)
     private Boolean notebook;
+
+    @Column(nullable = false)
     private Boolean aceptado;
 
-    @Column(name = "bootcamp_id", nullable = true)
+    @Column(name = "bootcamp_id", nullable = true) // Puede ser nulo
     private Integer bootcampId;
 
-    // Getters y Setters
+    // Constructor vacío requerido por JPA
+    public Postulante() {
+    }
+
+    // Getters y setters
     public Long getId() {
         return id;
     }
@@ -49,12 +72,12 @@ public class Postulante {
         this.apellido = apellido;
     }
 
-    public Integer getNroCedula() {
+    public String getNroCedula() {
         return nroCedula;
     }
 
-    public void setNroCedula(Integer nroCedula) {
-        this.nroCedula = nroCedula;
+    public void setNroCedula(String nroCedula) {
+        this.nroCedula = this.nroCedula;
     }
 
     public String getCorreo() {
