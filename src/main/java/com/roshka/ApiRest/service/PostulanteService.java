@@ -38,8 +38,7 @@ public class PostulanteService {
 
     @Transactional
     public void eliminarPostulantePorCedula(String nroCedula) {
-        Postulante postulante = postulanteRepository.findByNroCedula(nroCedula)
-                .orElseThrow(() -> new PostulanteNoEncontradoException("Postulante con cédula " + nroCedula + " no encontrado."));
-        postulanteRepository.delete(postulante);
+        postulanteRepository.deleteByNroCedula(nroCedula);  // Llama al repositorio para eliminar por cédula
+
     }
 }
