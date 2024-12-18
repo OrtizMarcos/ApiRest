@@ -2,43 +2,55 @@ package com.roshka.ApiRest.service;
 
 import com.roshka.ApiRest.model.Postulante;
 import com.roshka.ApiRest.repository.PostulanteRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.roshka.ApiRest.exception.PostulanteNoEncontradoException;
 
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class PostulanteService {
 
     @Autowired
-    private PostulanteRepository postulanteRepository;
+    private PostulanteRepository repository;
+
 
     public List<Postulante> getAllPostulantes() {
-        return postulanteRepository.findAll();
+        return repository.findAll();
     }
 
-    public Optional<Postulante> getPostulanteById(Long id) {
-        return postulanteRepository.findById(id);
+    public List<Postulante> getPostulantesByNroCedula(Integer nroCedula) {
+        return repository.findByNroCedula(nroCedula);
     }
 
-    public Postulante savePostulante(Postulante postulante) {
-        return postulanteRepository.save(postulante);
+    public Postulante updatePostulante(Long id, Postulante updatedPostulante) {
+        Optional<Postulante> postulanteOptional = repository.findById(id);
+
+        if (postulanteOptional.isPresent()) {
+            Postulante postulante = postulanteOptional.get();
+            postulante.setNombre(updatedPostulante.getNombre());
+            postulante.setApellido(updatedPostulante.getApellido());
+            postulante.setNroCedula(updatedPostulante.getNroCedula());
+            postulante.setCorreo(updatedPostulante.getCorreo());
+            postulante.setTelefono(updatedPostulante.getTelefono());
+            postulante.setDireccion(updatedPostulante.getDireccion());
+            postulante.setExperienciaLaboral(updatedPostulante.getExperienciaLaboral());
+            postulante.setEstudioUniversitario(updatedPostulante.getEstudioUniversitario());
+            postulante.setNotebook(updatedPostulante.getNotebook());
+            postulante.setAceptado(updatedPostulante.getAceptado());
+            postulante.setBootcampId(updatedPostulante.getBootcampId());
+            return repository.save(postulante);
+        } else {
+            throw new RuntimeException("Postulante no encontrado con ID: " + id);
+        }
     }
 
-    public Optional<Postulante> getPostulanteByCedula(String nroCedula) {
-        return postulanteRepository.findByNroCedula(nroCedula);
-    }
-
-    public void deletePostulante(Long id) {
-        postulanteRepository.deleteById(id);
-    }
-
-    @Transactional
-    public void eliminarPostulantePorCedula(String nroCedula) {
-        postulanteRepository.deleteByNroCedula(nroCedula);  // Llama al repositorio para eliminar por cédula
-
+    public void deletePostulanteByNroCedula(Integer nroCedula) {
+        Optional<Postulante> postulante = repository.findByNroCedula(nroCedula).stream().findFirst();
+        if (postulante.isPresent()) {
+            repository.delete(postulante.get());
+        } else {
+            throw new RuntimeException("Postulante no encontrado con nroCedula: " + nroCedula);
+        }
     }
 }
